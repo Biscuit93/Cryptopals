@@ -208,15 +208,26 @@ unsigned int plaintextScore ( char *in )
 	unsigned int score = 0,
 	             length = strlen( in );
 	static const char FREQUENCY[ 26 ] = "etaoinshrdlcumwfgypbvkjxqz";
+	static const char PAIRS[ 26 ] =     "thheaninerndreedesouthhaen";
 	
 	for ( int i = 0; i < length; i++ )
+	{
 		for ( int j = 0; j < 26; j++ )
 		{
 			if ( in[ i ] == FREQUENCY[ j ] 
-			   | in[ i ] == FREQUENCY[ j ] - 32 )
+			   || in[ i ] == FREQUENCY[ j ] - 32 )
 				score += 26 - j;
 		}
-
+		if ( i < length - 1 )
+			for ( int j = 0; j < 26; j += 2 )
+			{
+				if ( ( in[ i ] == PAIRS[ j ] 
+				   || in[ i ] == PAIRS[ j ] - 32 )
+				   && ( in[ i + 1 ] == PAIRS[ j + 1 ] 
+				   || in[ i + 1 ] == PAIRS[ j + 1 ] - 32 ) )
+					score += 26 + ( 26 - j );
+			}
+	}
 	return score;
 }
 
@@ -289,4 +300,45 @@ void hexDump ( unsigned char *str, unsigned int len )
 	}
 
 	puts( "" );
+}
+
+char **loadFileToStrings ( char *file, unsigned int *strCount )
+{
+	FILE *fptr = NULL;
+	char c;
+	char **result = NULL;
+	unsigned int lines = 1,
+	             length = 1,
+		     countLength = 1;
+
+	if ( ( fptr = fopen( file, "r" ) ) == NULL )
+		printf( "Error opening file %s.\n", file );
+
+	while ( !feof( fptr ) )
+	{
+		if ( countLength )
+			length++;
+		if ( fgetc( fptr ) == '\n' )
+		{
+			countLength = 0;
+			lines++;
+		}
+
+	}
+
+	*strCount = lines;
+	result = malloc( sizeof( char * ) * lines );
+	for ( int i = 0; i < lines; i++ )
+		result[ i ] = malloc( sizeof( char ) * length );
+	lines = 0;
+
+	fseek( fptr, 0, SEEK_SET );
+
+	while ( !feof( fptr ) )
+		fscanf( fptr, "%s", result[ lines++ ] );
+
+	fclose( fptr );
+	fptr = NULL;
+
+	return result;
 }

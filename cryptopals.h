@@ -77,7 +77,14 @@ char sanitizeASCII ( char c );
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
- * Prints a hex dump.                                                        *
+ * Prints a hex dump of len bytes of whatever is passed to str.              *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void hexDump ( unsigned char *str, unsigned int len );
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ * Takes a file and dumps its contents to memory in an array of pointers,    *
+ * and writes the number of lines to the address given to strCount.          *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+char **loadFileToStrings ( char *file, unsigned int *strCount );
 
