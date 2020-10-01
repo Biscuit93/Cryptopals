@@ -65,6 +65,20 @@ unsigned char *singleByteXOR ( unsigned char *in, unsigned char key,
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ * Takes an array of bytes and XORs them against a repeating key.            *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+unsigned char *repeatingKeyXOR ( unsigned char *in, unsigned char *key,
+                                 unsigned int inlen, unsigned int keylen );
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ * Calculates the Hamming distance between two arrays of bytes.              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+unsigned int hammingDistance ( unsigned char *in1, unsigned char *in2, 
+                               unsigned int len );
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Takes a string and scores it based on the frequency of common letters.    *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 unsigned int plaintextScore ( char *in );

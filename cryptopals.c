@@ -203,6 +203,51 @@ unsigned char *singleByteXOR ( unsigned char *in, unsigned char key,
 	return result;
 }
 
+unsigned char *repeatingKeyXOR ( unsigned char *in, unsigned char *key,
+                                 unsigned int inlen, unsigned int keylen )
+{
+	unsigned char *result = malloc( sizeof( unsigned char ) * inlen );
+	
+	int i = 0,
+	    k = 0;
+	
+	do
+	{
+		result[ i ] = in[ i ] ^ key[ k ];
+		
+		if ( ++k >= keylen )
+			k = 0;
+	}
+	while ( ++i < inlen );
+
+	return result;
+}
+
+unsigned int hammingDistance ( unsigned char *in1, unsigned char *in2, 
+                               unsigned int len )
+{
+	unsigned int result = 0;
+	unsigned char *xor = fixedLengthXOR( in1, in2, len );
+	unsigned char c;
+
+	for ( int i = 0; i < len; i++ )
+	{
+		c = xor[ i ];
+		while ( c )
+		{
+			if ( ( c & 0x01 ) == 1 )
+				result++;
+
+			c >>= 1;
+		}
+	}	
+
+	free( xor );
+	xor = NULL;
+
+	return result;
+}
+
 unsigned int plaintextScore ( char *in )
 {
 	unsigned int score = 0,
